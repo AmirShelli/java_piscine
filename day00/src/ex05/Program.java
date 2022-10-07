@@ -40,6 +40,7 @@ public class Program {
             }
         }
 
+        input = sin.nextLine();
         while(true)
         {
             input = sin.nextLine();
@@ -49,19 +50,19 @@ public class Program {
             pupils.get(s[0]).setStatus(s[1], s[2],s[3]);
         }
 
-        System.out.print("          |");
+        System.out.printf("%10s", "|");
         for (Lesson lesson : lessons){
-            System.out.printf("%s:00 %s %3s|", lesson.getTime(), lesson.getDay(), lesson.getDate());
+            System.out.printf("%s:00 %s %2s|", lesson.getTime(), lesson.getDay(), lesson.getDate());
         }
 
         for(Pupil pupil : pupils.values()){
-            System.out.printf("%10s", pupil.getName());
+            System.out.printf("\n%9s ", pupil.getName());
             for (Lesson lesson : lessons){
-                String status = pupil.getStatus(lesson.getDate());
+                Integer status = pupil.getStatus(lesson.getDate());
                 if(status != null)
                     System.out.printf("%10s|", status);
                 else
-                    System.out.print("          |");
+                    System.out.printf("%11s", "|");
             }
         }
 
@@ -73,18 +74,18 @@ public class Program {
 
     private static class Pupil{
         private String name;
-        private HashMap<Lesson, String> status = new HashMap<>();
+        private HashMap<Lesson, Integer> status = new HashMap<>();
 
         Pupil(String name){
             this.name = name;
         }
         public void setStatus(String time, String date, String status){
-            this.status.put(new Lesson(time, date), status);
+            this.status.put(new Lesson(time, date), (status.equals("HERE")) ? 1 : -1);
         }
         public String getName(){ return name;}
 
-        public String getStatus(String date){
-            for(Map.Entry<Lesson,String> s : status.entrySet()){
+        public Integer getStatus(String date){
+            for(Map.Entry<Lesson,Integer> s : status.entrySet()){
                 if(s.getKey().getDate().equals(date))
                     return s.getValue();
             }
