@@ -73,8 +73,8 @@ public class Program {
     }
 
     private static class Pupil{
-        private String name;
-        private HashMap<Lesson, Integer> status = new HashMap<>();
+        private final String name;
+        private final HashMap<Lesson, Integer> status = new HashMap<>();
 
         Pupil(String name){
             this.name = name;
@@ -94,8 +94,8 @@ public class Program {
     }
 
     private static class Lesson{
-        private String time;
-        private String date;
+        private final String time;
+        private final String date;
         private days day;
         
         Lesson(String time, String date)
