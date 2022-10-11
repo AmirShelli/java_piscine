@@ -7,5 +7,9 @@ public class Program {
         Transaction sample = new Transaction();
 
         sample.setRecipient(bob);
+        sample.setSender(tim);
+        sample.setAmount(30000);
+
+
     }
 }
