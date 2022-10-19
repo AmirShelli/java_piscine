@@ -1,13 +1,12 @@
-package ex00;
-
-import java.util.UUID;
+package ex01;
 
 public class User {
-    private Integer id;
+    private final Integer id;
     private String name;
     private long balance;
 
     User(String name, long balance){
+        this.id = UserIdsGenerator.getInstance().generateId();
         if(balance >= 0)
             this.balance = balance;
         this.name = name;
@@ -22,10 +21,6 @@ public class User {
 
     public Integer getId() {
         return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public void setName(String name) {

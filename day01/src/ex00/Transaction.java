@@ -9,8 +9,12 @@ public class Transaction {
     private String category;
     private long  amount;
 
-    public void transfer(long amount)
-    {
+    Transaction(User sender, User recipient, long amount) {
+        this.sender = sender;
+        this.recipient = recipient;
+        this.amount =  amount;
+    }
+    public void transfer(){
         recipient.changeBalance(amount);
         sender.changeBalance(-amount);
     }
