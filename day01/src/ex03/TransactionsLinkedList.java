@@ -1,3 +1,5 @@
+package ex03;
+
 import java.util.UUID;
 
 public class TransactionsLinkedList implements TransactionsList {
@@ -22,7 +24,7 @@ public class TransactionsLinkedList implements TransactionsList {
     public void deleteTransaction(UUID uuid) {
         TransactionNode tmp = start.getNext();
         while (tmp != tail)	{
-            if (tmp.getData().getIdentifier().equals(uuid))	{
+            if (tmp.getData().getId().equals(uuid))	{
                 tmp.getPrevious().setNext(tmp.getNext());
                 tmp.setData(null);
                 tmp.setPrevious(null);
@@ -32,7 +34,11 @@ public class TransactionsLinkedList implements TransactionsList {
             }
             tmp = tmp.getNext();
         }
-        throw new TransactionNotFoundException();
+        try {
+            throw new TransactionNotFoundException("Transaction not Found");
+        } catch (TransactionNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -41,7 +47,11 @@ public class TransactionsLinkedList implements TransactionsList {
         TransactionNode tmp = this.start.getNext();
 
         if (tmp.getData() == null)	{
-            throw new TransactionListEmptyException();
+            try {
+                throw new TransactionNotFoundException("List Empty");
+            } catch (TransactionNotFoundException e) {
+                throw new RuntimeException(e);
+            }
         }
         for (int i = 0; i < this.length; i++) {
             ret[i] = tmp.getData();
