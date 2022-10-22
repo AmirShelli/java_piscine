@@ -7,7 +7,7 @@ public class User {
     private String name;
     private long balance;
 
-    User(String name, long balance){
+    public User(String name, long balance){
         id = UUID.randomUUID();
         if(balance >= 0)
             this.balance = balance;

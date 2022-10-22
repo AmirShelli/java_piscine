@@ -1,6 +1,6 @@
 package ex03;
 
-import ex00.User;
+import ex02.User;
 
 import java.util.UUID;
 
@@ -15,6 +15,7 @@ public class Transaction {
         this.sender = sender;
         this.recipient = recipient;
         this.amount =  amount;
+        this.id = UUID.randomUUID();
     }
     public void transfer(){
         recipient.changeBalance(amount);

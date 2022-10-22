@@ -20,25 +20,20 @@ public class UsersArrayList implements UsersList {
 
     @Override
     public User getUser(UUID id) throws UserNotFoundException {
-        try {
             for(int i = 0; i < size; i++){
                 if(users[i].getId() == id)
                     return users[i];
             }
             throw new UserNotFoundException( "could not find ID " + id);
-        } catch (UserNotFoundException e) {
-            return null;
-        }
-
     }
 
     @Override
-    public User getUser(int index) {
+    public User getUser(int index) throws UserNotFoundException{
         for(int i = 0; i < size; i++){
             if(i == index)
                 return users[i];
         }
-        return null;
+            throw new UserNotFoundException( "index out of bound");
     }
 
     @Override
