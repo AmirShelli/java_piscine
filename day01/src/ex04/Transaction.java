@@ -1,7 +1,5 @@
 package ex04;
 
-import ex02.User;
-
 import java.util.UUID;
 
 public class Transaction {

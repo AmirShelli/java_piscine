@@ -6,6 +6,7 @@ public class User {
     private final UUID id;
     private String name;
     private long balance;
+    private TransactionsLinkedList transactions = new TransactionsLinkedList();
 
     public User(String name, long balance){
         id = UUID.randomUUID();
@@ -38,7 +39,11 @@ public class User {
         return balance;
     }
 
-    public void setName() {
+    public void addTransaction(Transaction transaction) {
+        transactions.addTransaction(transaction);
+    }
+
+        public void setName() {
         this.name = name;
     }
 

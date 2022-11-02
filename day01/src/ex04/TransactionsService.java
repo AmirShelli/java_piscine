@@ -4,7 +4,6 @@ import java.util.UUID;
 
 public class TransactionsService {
     UsersArrayList users = new UsersArrayList();
-    TransactionsLinkedList transactions = new TransactionsLinkedList();
 
     void addUser(String name, long balance)
     {
@@ -22,7 +21,17 @@ public class TransactionsService {
 
     void transfer(UUID senderID, UUID recipientID, long amount)
     {
-        transactions.addTransaction(new Transaction(users.getUser(senderID)),
-                new Transaction(users.getUser(recipientID), amount));
+        try{
+            User sender = users.getUser(senderID);
+            User recipient = users.getUser(recipientID);
+            Transaction transfer = new Transaction(users.getUser(recipientID), users.getUser(senderID), amount);
+            sender.addTransaction(transfer);
+            recipient.addTransaction(transfer);
+            transfer.transfer();;
+        } catch (UserNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
+
+
 }
