@@ -1,6 +1,6 @@
-package ex04;
+package ex05;
 
-public class UsersArrayList implements UsersList{
+public class UsersArrayList implements UsersList {
 
     private final int   START_CAPACITY = 10;
 
