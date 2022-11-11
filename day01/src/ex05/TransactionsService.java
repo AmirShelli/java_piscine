@@ -53,6 +53,30 @@ public class TransactionsService {
 
         _usersList.getUserById(userId).getUserTransactions().removeTransactionByID(transactionId);
     }
+    public void printTransferValidity() {
+        User userX;
+        Transaction [] trArrayX;
+
+        int userIdY;
+        User userY;
+
+        System.out.println("Check results:");
+
+        for (int i = 1; i <= _usersList.getUsersAmount(); i++) {
+            userX = _usersList.getUserById(i);
+            trArrayX = userX.getUnpairedTransactions().toArray();
+            for (int z = 0; z < trArrayX.length; z++) {
+
+                userIdY = trArrayX[z].get_recipient().getId() == userX.getId() ? trArrayX[z].get_sender().getId() : trArrayX[z].get_recipient().getId();
+                userY = _usersList.getUserById(userIdY);
+
+                System.out.println(userX.getUserName() + "(id = " + userX.getId()
+                        + ") has an unacknowledged transfer id = "
+                        + trArrayX[z].get_id().toString()
+                        + " from " + userY.getUserName() + "(id = " + userY.getId() + ") for " + trArrayX[z].get_amount());
+            }
+        }
+    }
 
     public Transaction[] getUnpairedTransactions() {
         return _unpairedTransactions.toArray();

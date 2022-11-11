@@ -6,60 +6,69 @@ public class User {
 
     public static final String ANSI_GREEN = "\u001B[32m";
 
-    private final int _id;
+    private final int id;
 
-    private String _userName;
-    private long _balance;
+    private String userName;
+    private long balance;
 
-    private TransactionsList _userTransactions;
+    private TransactionsList userTransactions;
+    private TransactionsList unpairedTransactions;
 
     public User(String userName, int balance) {
 
-        this._id = UserIdsGenerator.getInstance().generateId();
+        this.id = UserIdsGenerator.getInstance().generateId();
 
-        this._userName = userName;
+        this.userName = userName;
 
         if (balance < 0) {
-            this._balance = 0;
+            this.balance = 0;
             System.out.println("\u001B[31m" + "Incorrect Start Balance" + "\u001B[0m");
         } else {
-            this._balance = balance;
+            this.balance = balance;
         }
-
-        _userTransactions = new TransactionsLinkedList();
+        userTransactions = new TransactionsLinkedList();
+        unpairedTransactions = new TransactionsLinkedList();
     }
 
     public void printUserData() {
-        System.out.println(ANSI_GREEN + "User " + _id + ":" + ANSI_RESET);
-        System.out.println("NAME          " + _userName);
-        System.out.println("BALANCE       " + _balance + "\n");
+        System.out.println(ANSI_GREEN + "User " + id + ":" + ANSI_RESET);
+        System.out.println("NAME          " + userName);
+        System.out.println("BALANCE       " + balance + "\n");
     }
 
     public String getUserName() {
-        return _userName;
+        return userName;
     }
 
     public long getBalance() {
-        return _balance;
+        return balance;
     }
 
     public int getId() {
-        return _id;
+        return id;
     }
 
     public TransactionsList getUserTransactions() {
-        return _userTransactions;
+        return userTransactions;
+    }
+
+    public TransactionsList getUnpairedTransactions() {
+        return unpairedTransactions;
     }
 
     public void setUserName(String userName) {
-        this._userName = userName;
+        this.userName = userName;
     }
 
     public void setBalance(long balance) {
         if (balance < 0) {
             System.out.println("\u001B[31m" + "Incorrect Balance" + "\u001B[0m");
         } else {
-            this._balance = balance;
+            this.balance = balance;
         }
+    }
+
+    public void setUnpairedTransactions(TransactionsList _unpairedTransactions) {
+        this.unpairedTransactions = _unpairedTransactions;
     }
 }
