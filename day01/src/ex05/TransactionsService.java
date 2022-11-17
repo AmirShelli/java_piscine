@@ -46,7 +46,7 @@ public class TransactionsService {
             }
         }
         if (noTransactionInUnpArray)
-        _unpairedTransactions.addTransaction(new Transaction(_usersList
+            _unpairedTransactions.addTransaction(new Transaction(_usersList
                 .getUserById(userId)
                 .getUserTransactions()
                 .getTransactionById(transactionId)));
