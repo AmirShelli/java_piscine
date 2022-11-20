@@ -1,40 +1,50 @@
 package ex00;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Program {
-    public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
-        try {
-            FileInputStream signature = new FileInputStream("/home/mitsu/IdeaProjects/java_piscine/day02/src/ex00/signature.txt");
-            byte[] buffer = new byte[signature.available()];
-            signature.read(buffer, 0, buffer.length);
-            FileInputStream fileToCheck = new FileInputStream(in.next());
-            byte[] b = new byte[fileToCheck.available()];
-            signature.read(b, 0, b.length);
-            String s = new String(buffer);
-            FileOutputStream result = new FileOutputStream("/home/mitsu/IdeaProjects/java_piscine/day02/src/ex00/result.txt");
-            boolean checked = false;
-            {
-                String [] s_check = s.substring(s.indexOf(",") + 2, s.indexOf("\n")).split(" ");
-                while(true){
-                    int i = 0;
-                    if(b[i] != Integer.parseInt(s_check[i]))
-                        break;
-                    if(i == s_check.length)
-                        checked = true;
-                    System.out.println(i);
-                    i++;
-                }
-                s = s.substring(s.indexOf("\n"));
-            } while(s.equals("") && !checked);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    public static HashMap<String, String> getSignatures(FileInputStream file) {
+        HashMap<String, String> signatures = new HashMap<>();
+        Scanner fromFile = new Scanner(file);
+        while(fromFile.hasNextInt()){
+            String key = fromFile.next();
+            if(key.contains(","))
+                key = key.substring(0, key.length() - 1);
+            String line = fromFile.nextLine();
+            line = line.replace("\\s", "");
+            signatures.put(key, line);
+        }
+        return (signatures);
+    }
+    public static void byteToHex(byte[] byteArray)
+    {
+        String hex = "";
+        for (byte i : byteArray) {
+            hex += String.format("%02X", i);
+        }
+        System.out.print(hex);
+    }
+    public static void checkFile(String path) throws FileNotFoundException {
+        File file = new File(path);
+        if(!(file.isFile() || file.exists() || file.canRead()))
+            System.out.println("can't open file!");
+        else {
+            FileInputStream inputFile = new FileInputStream(path);
+
         }
 
+    }
+    public static void main(String[] args) throws FileNotFoundException {
+        FileOutputStream result = new FileOutputStream("result.txt");
+        Scanner in = new Scanner(System.in);
+        while(true) {
+            String path = in.nextLine();
+            if(path.equals("42"))
+                break;
+            checkFile(path);
+
+        }
     }
 }
