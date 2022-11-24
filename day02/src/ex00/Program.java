@@ -6,47 +6,75 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class Program {
+
+    private static final int BYTE_SIZE = 8;
+    private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
+
+    private static String _rightSignature;
+
     public static HashMap<String, String> getSignatures() throws FileNotFoundException {
-        FileInputStream file = new FileInputStream("/home/mitsu/IdeaProjects/java_piscine/day02/src/ex00/signature.txt");
         HashMap<String, String> signatures = new HashMap<>();
-        Scanner fromFile = new Scanner(file);
-        while(fromFile.hasNextInt()){
-            String key = fromFile.next();
-            if(key.contains(","))
-                key = key.substring(0, key.length() - 1);
-            String line = fromFile.nextLine();
-            line = line.replace("\\s", "");
-            signatures.put(key, line);
-        }
+        try {
+            FileInputStream file = new FileInputStream("/home/mitsu/IdeaProjects/java_piscine/day02/src/ex00/signatures.txt");
+            Scanner fromFile = new Scanner(file);
+            do {
+                String line = fromFile.next();
+                if (line.contains(","))
+                    line = line.substring(0, line.length() - 1);
+                String key = fromFile.nextLine();
+                key = key.replaceAll("\\s", "");
+                System.out.println("keys = " + key);
+                signatures.put(key, line);
+            } while (!fromFile.hasNextInt());}
+        catch (Exception ignored) {}
         return (signatures);
     }
-    public static String byteToHex(byte[] byteArray)
-    {
-        String hex = "";
-        for (byte i : byteArray) {
-            hex += String.format("%02X", i);
+    private static boolean isFound(HashMap<String, String> allSign, String sign) {
+        for (String key : allSign.keySet()) {
+            if (sign.indexOf(key) == 0) {
+                _rightSignature = allSign.get(key);
+                return true;
+            }
         }
-        return hex;
+        return false;
     }
-    public static void checkFile(String path, HashMap<String, String> signatures) throws FileNotFoundException {
+    public static String byteToHex(byte[] bytes) {
+        char[] hexChars = new char[bytes.length * 2];
+
+        for (int j = 0; j < bytes.length; j++) {
+
+            int v = bytes[j] & 0xFF;
+
+            hexChars[j * 2] = HEX_ARRAY[v >>> 4];
+            hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
+        }
+        return new String(hexChars);
+    }
+    public static void checkFile(String path, HashMap<String, String> signatures) throws IOException {
         File file = new File(path);
         if(!(file.isFile() || file.exists() || file.canRead()))
             System.out.println("can't open file!");
         else {
-            FileInputStream inputFile = new FileInputStream(path);
-            byte[] buffer = new byte[(int) file.length()];
-            String fileSignature = byteToHex(Arrays.copyOfRange(buffer, 0 , 4));
+            FileInputStream inputFile = new FileInputStream(file);
+            byte[] buffer = new byte[BYTE_SIZE];
+            inputFile.read(buffer,0,BYTE_SIZE);
+            String fileSignature = byteToHex(buffer);
             System.out.println(fileSignature);
-            //signatures.get(fileSignature);
-
+            if(isFound(signatures, fileSignature)) {
+                FileWriter result = new FileWriter("result.txt", true);
+                result.append(_rightSignature).append(String.valueOf('\n'));
+                System.out.println("PROCESSED");
+            } else {
+                System.out.println("UNDEFINED");
+            }
         }
 
     }
-    public static void main(String[] args) throws FileNotFoundException {
-        FileOutputStream result = new FileOutputStream("result.txt");
+    public static void main(String[] args) throws IOException {
         HashMap<String, String> allSign = getSignatures();
         Scanner in = new Scanner(System.in);
         while(true) {
+            _rightSignature = "";
             String path = in.nextLine();
             if(path.equals("42"))
                 break;
