@@ -14,20 +14,17 @@ public class Program {
 
     public static HashMap<String, String> getSignatures() throws FileNotFoundException {
         HashMap<String, String> signatures = new HashMap<>();
-        try {
-            FileInputStream file = new FileInputStream("/home/mitsu/IdeaProjects/java_piscine/day02/src/ex00/signatures.txt");
-            Scanner fromFile = new Scanner(file);
-            do {
-                String line = fromFile.next();
-                if (line.contains(","))
-                    line = line.substring(0, line.length() - 1);
-                String key = fromFile.nextLine();
-                key = key.replaceAll("\\s", "");
-                System.out.println("keys = " + key);
-                signatures.put(key, line);
-            } while (!fromFile.hasNextInt());}
-        catch (Exception ignored) {}
-        return (signatures);
+        FileInputStream file = new FileInputStream("/home/mitsu/IdeaProjects/java_piscine/day02/src/ex00/signatures.txt");
+        Scanner fromFile = new Scanner(file);
+        do {
+            String line = fromFile.next();
+            if (line.contains(","))
+                line = line.substring(0, line.length() - 1);
+            String key = fromFile.nextLine();
+            key = key.replaceAll("\\s", "");
+            signatures.put(key, line);
+        } while (fromFile.hasNextLine());
+        return signatures;
     }
     private static boolean isFound(HashMap<String, String> allSign, String sign) {
         for (String key : allSign.keySet()) {
@@ -59,11 +56,11 @@ public class Program {
             byte[] buffer = new byte[BYTE_SIZE];
             inputFile.read(buffer,0,BYTE_SIZE);
             String fileSignature = byteToHex(buffer);
-            System.out.println(fileSignature);
             if(isFound(signatures, fileSignature)) {
-                FileWriter result = new FileWriter("result.txt", true);
-                result.append(_rightSignature).append(String.valueOf('\n'));
+                FileWriter result = new FileWriter("/home/mitsu/IdeaProjects/java_piscine/day02/src/ex00/result.txt", true);
+                result.append(_rightSignature).append("\n");
                 System.out.println("PROCESSED");
+                result.close();
             } else {
                 System.out.println("UNDEFINED");
             }
@@ -79,7 +76,6 @@ public class Program {
             if(path.equals("42"))
                 break;
             checkFile(path, allSign);
-
         }
     }
 }
