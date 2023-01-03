@@ -13,7 +13,7 @@ public class Program {
             StringBuilder result = new StringBuilder();
             String s;
             while ((s = stdInput.readLine()) != null)
-                result.append(s);
+                result.append(String.format("%s\n" , s));
             return result.toString();
         } catch (IOException e) {
             throw new RuntimeException(e);
