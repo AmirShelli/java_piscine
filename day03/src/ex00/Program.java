@@ -12,8 +12,8 @@ public class Program {
         }
 
         int count = getCount(args);
-        Thread hen = new Dispute("Hen", count);
-        Thread egg = new Dispute("Egg", count);
+        Dispute hen = new Dispute("Hen", count);
+        Dispute egg = new Dispute("Egg", count);
 
         hen.start();
         egg.start();
@@ -23,10 +23,12 @@ public class Program {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        for (int i = 0; i < COUNT; i++)
+            System.out.println("Human");
     }
 
     public static Integer getCount(String[] args) {
-        if (args.length != 1 || !args[0].startsWith("--count="))
+        if (!args[0].startsWith("--count="))
             return COUNT;
         try {
             COUNT = Integer.parseInt(args[0].substring(8));
