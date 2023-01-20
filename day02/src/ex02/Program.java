@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class Program {
-
     public static String read(Process p)
     {
         try(BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()))){
@@ -22,7 +21,6 @@ public class Program {
     public static void launchLS() throws IOException {
         ArrayList<String> commands = new ArrayList<String>();
         commands.add("ls");
-//        commands.add("-l");
         commands.add("/home/mitsu");
 
         ProcessBuilder pb = new ProcessBuilder(commands);
@@ -31,6 +29,7 @@ public class Program {
         System.out.println(result);
     }
     public static void main(String[] args) throws IOException {
+        String path = args[1];
         launchLS();
     }
 }
