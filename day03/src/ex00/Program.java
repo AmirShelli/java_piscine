@@ -5,7 +5,6 @@ import java.util.Arrays;
 public class Program {
     public static Integer COUNT = -1;
     public static void main(String[] args) {
-        Arrays.stream(args).forEach(System.out::println);
         if (getCount(args) < 1){
             System.err.println("flag --count='int > 0' is required");
             System.exit(-1);
