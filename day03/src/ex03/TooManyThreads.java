@@ -1,6 +1,6 @@
 package ex03;
 
-import java.io.FileNotFoundException;
+import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
@@ -8,19 +8,20 @@ import java.util.Map;
 
 public class TooManyThreads extends Thread{
 
-    private final Map<Integer, Boolean> files = getFileInfo();
     private Map<Integer, Boolean> getFileInfo() {
         Map<Integer, Boolean> files = new HashMap<>();
-        try (FileReader file = new FileReader("file_urls.txt")) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("file_urls.txt"))) {
+            String line;
             int i = 0;
-            while(file.read() > 0) files[i++] = false;
+            while ((line = reader.readLine()) != null)
+                files.put(i++, false);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         return files;
     }
+
     private int getAccess() {
-        while()
     }
     @Override
     public void run() {
