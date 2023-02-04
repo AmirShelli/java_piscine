@@ -3,11 +3,20 @@ package ex03;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
-public class TooManyThreads extends Thread{
+public class TooManyThreads{
+    ArrayList<Thread> threads = new ArrayList<>();
+    private static final AtomicInteger count = new AtomicInteger(0);
+    private Map<Integer, Boolean> files = getFileInfo();
+    private final int _threadCount;
 
+    TooManyThreads(int _threadCount) {
+        this._threadCount = _threadCount;
+    }
     private Map<Integer, Boolean> getFileInfo() {
         Map<Integer, Boolean> files = new HashMap<>();
         try (BufferedReader reader = new BufferedReader(new FileReader("file_urls.txt"))) {
@@ -20,30 +29,42 @@ public class TooManyThreads extends Thread{
         }
         return files;
     }
-
-    private int getAccess() {
+    public void startThreads() {
+        for(int i = 0; i < _threadCount; i++)
+            threads.add(new Downloader());
     }
-    @Override
-    public void run() {
+    public void joinThreads() throws InterruptedException {
+        for(Thread e : threads)
+            e.join();
+    }
+    class Downloader extends Thread {
 
-        synchronized (this) {
-            boolean isDownloading = files.values().stream().allMatch(Boolean::booleanValue);
-            while(isDownloading) {
+        private final int _threadNum;
+
+        Downloader(){
+            _threadNum = count.incrementAndGet();
+            this.start();
+        }
+        @Override
+        public void run() {
+
+            while(files.values().stream().allMatch(Boolean::booleanValue)) {
+                synchronized (this) {
+                    Integer _fileNumber = files.entrySet().stream()
+                            .filter(Map.Entry::getValue)
+                            .map(Map.Entry::getKey)
+                            .findFirst().get();
+                    System.out.println("thread-" + _threadNum + " start download file number " + 0);
+                    files.put(_fileNumber, true);
+                }
                 try {
-                    wait();
+                    sleep(1000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
+                System.out.println("thread-" + _threadNum + " finish download file number " + 0);
             }
         }
-        System.out.println("thread-" + _threadNum + " start download file number " + _fileNumber);
-        try {
-            files[_fileNumber] = true;
-            sleep(1000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("thread-" + _threadnum + " finish download file number " + _fileNumber);
-        files[_fileNumber] = false;
     }
+
 }
