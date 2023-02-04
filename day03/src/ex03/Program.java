@@ -1,5 +1,7 @@
 package ex03;
 
+import org.jetbrains.annotations.NotNull;
+
 public class Program {
 
     public static void error(String error) {
@@ -7,7 +9,7 @@ public class Program {
         System.exit(1);
     }
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String @NotNull [] args) throws InterruptedException {
 
         if (args.length == 0 || !args[0].startsWith("--threadsCount=")) {
             error("Flag --threadsCount= is required");

@@ -16,17 +16,14 @@ public class Download {
 
     Iterator <Map.Entry<Integer,String>> it;
 
-    String key = "";
+    final String key = "";
 
     Integer countFiles;
 
     List <Thr> thrList = new ArrayList<>();
 
-    private final int DEFAULT_BUFFER_SIZE = 50;
-
     public Download() {
-        try {
-            FileInputStream inputStream = new FileInputStream("/home/mitsu/IdeaProjects/java_piscine/day03/src/ex03/file_urls.txt");
+        try(FileInputStream inputStream = new FileInputStream("/home/mitsu/IdeaProjects/java_piscine/day03/src/ex03/file_urls.txt")) {
 
             Scanner sc = new Scanner(inputStream);
 
@@ -84,12 +81,8 @@ public class Download {
     }
 
     public void joinThreads() throws InterruptedException {
-
-        Thr thr;
-
-        for (int i = 0; i < thrList.size(); i++) {
-            thr = thrList.get(i);
-            thr.join();
+        for (Thr value : thrList) {
+            value.join();
         }
     }
 
@@ -99,7 +92,7 @@ public class Download {
 
     public class Thr extends Thread {
 
-        private Integer     threadNumber;
+        private final Integer     threadNumber;
 
         public Thr(int threadNumber) {
             this.threadNumber = threadNumber;
@@ -110,6 +103,7 @@ public class Download {
 
                 int read;
 
+                int DEFAULT_BUFFER_SIZE = 50;
                 byte[] bytes = new byte[DEFAULT_BUFFER_SIZE];
 
                 while ((read = inputStream.read(bytes)) != -1) {
@@ -133,9 +127,7 @@ public class Download {
 
                         try (InputStream is = new BufferedInputStream(connection.getInputStream())) {
                             File dir = new File("download");
-                            if (!dir.exists()){
-                                dir.mkdir();
-                            }
+                            if (!dir.exists()) dir.mkdir();
                             copyInputStreamToFile(is, new File("download/" + file.getValue().substring(file.getValue().lastIndexOf('/'))));
                         }
                         System.out.println(ANSI_GREEN + "Thread-" + threadNumber + " finish download file number " + file.getKey() + ANSI_RESET);
