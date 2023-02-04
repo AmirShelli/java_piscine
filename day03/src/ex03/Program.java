@@ -1,13 +1,14 @@
 package ex03;
 
-import org.jetbrains.annotations.NotNull;
-
 public class Program {
+
     public static void error(String error) {
         System.err.println(error);
         System.exit(1);
     }
-    public static void main(String @NotNull [] args) {
+
+    public static void main(String[] args) throws InterruptedException {
+
         if (args.length == 0 || !args[0].startsWith("--threadsCount=")) {
             error("Flag --threadsCount= is required");
         }
@@ -23,12 +24,8 @@ public class Program {
             error("Must be more then 0 threads");
         }
 
-        TooManyThreads download = new TooManyThreads(countThreads);
-        download.startThreads();
-        try {
-            download.joinThreads();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        Download download = new Download();
+        download.startThreads(Math.min(countThreads, download.getCountFiles()));
+        download.joinThreads();
     }
 }
