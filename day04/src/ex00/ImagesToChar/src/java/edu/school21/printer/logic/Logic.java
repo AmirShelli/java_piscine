@@ -10,7 +10,7 @@ import java.nio.file.Paths;
 public class Logic {
     protected int x;
     public static int index = 1;
-    public static int[][] seeBMPImage(String BMPFileName, char b, char w) throws IOException {
+    public static int[][] seeBMPImage(String BMPFileName, int b, int w) throws IOException {
         BufferedImage image = ImageIO.read(Files.newInputStream(Paths.get(BMPFileName)));
         int[][] array2D = new int[image.getWidth()][image.getHeight()];
 
